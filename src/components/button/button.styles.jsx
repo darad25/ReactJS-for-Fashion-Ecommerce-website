@@ -1,9 +1,12 @@
+import { findRenderedComponentWithType } from 'react-dom/test-utils';
 import styled from 'styled-components';
+
+import { SpinnerContainer } from '../spinner/spinner.styles';
 
 export const BaseButton = styled.button`
 min-width: 200px;
 width: auto;
-height: 50px;
+height: 60px;
 letter-spacing: 0.5px;
 line-height: 50px;
 padding: 0 35px 0 35px;
@@ -17,10 +20,11 @@ border: none;
 cursor: pointer;
 display: flex;
 justify-content: center;
+align-items: center;
 
 &:hover {
-  background-color: white;
-  color: black;
+  background-color: black;
+  color: white;
   border: 1px solid black;
 }
 `;
@@ -46,3 +50,25 @@ export const InvertedButton = styled(BaseButton)`
     border: none;
   }
 `;  
+
+export const ButtonSpinner = styled(SpinnerContainer)`
+display: inline-block;
+width: 40px;
+height: 40px;
+border: 3px solid rgba(195, 195, 195, 0.6);
+border-radius: 50%;
+border-top-color: #636767;
+animation: spin 1s ease-in-out infinite;
+-webkit-animation: spin 1s ease-in-out infinite;
+@keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+`
+// this means only edit out the width the rest of features/design should be imported from Spinner container styles

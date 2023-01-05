@@ -15,7 +15,6 @@ import {
     getDoc,
     setDoc, 
     collection,
-    WriteBatch,
     writeBatch,
     query,
     getDocs
@@ -64,15 +63,10 @@ export const addCollectionAndDocuments = async (
 export const getCategoriesAndDocuments = async () => {
     const collectionRef = collection(db, 'categories');
     const q = query(collectionRef);
-
+    
+    // await Promise.reject(new Error('new error woops'))
     const querySnapshot = await getDocs(q);
-    const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
-        const { title, items } = docSnapshot.data();
-        acc[title.toLowerCase()] = items;
-        return acc;
-    }, {});
-
-    return categoryMap;
+    return querySnapshot.docs.map(docSnapshot => docSnapshot.data());
 };
 
 export const createUserDocumentFromAuth = async (
@@ -87,7 +81,7 @@ export const createUserDocumentFromAuth = async (
 
     if(!userSnapshot.exists()) {
         const { displayName, email } = userAuth;
-        const createdAt =new Date();
+        const createdAt = new Date();
 
         try {
             await setDoc(userDocRef, {
@@ -101,7 +95,7 @@ export const createUserDocumentFromAuth = async (
         }
     }
 
-    return userDocRef;
+    return userSnapshot;
 };
 
 
@@ -117,8 +111,20 @@ export const signInAuthUserWithEmailAndPassword = async (email, password) => {
     return await signInWithEmailAndPassword(auth, email, password);
 };
 
-
 export const signOutUser = async () => await signOut(auth);
 
 export const onAuthStateChangedListener = (callback) => 
-   onAuthStateChanged(auth, callback); 
+   onAuthStateChanged(auth, callback) ;
+
+export const getCurrentUser = () => {
+    return new Promise((resolve, reject) => {
+        const unsubscribe = onAuthStateChanged(
+            auth, 
+            (userAuth) => {
+                unsubscribe();
+                resolve(userAuth);
+            },
+            reject 
+        );
+    });
+};    
