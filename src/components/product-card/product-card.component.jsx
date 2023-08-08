@@ -7,7 +7,7 @@ import {
   Footer,
   Name,
   Price,
-} from './product-card.styles';
+} from './product-card.styles'; 
 
 import Button, { BUTTON_TYPE_CLASSES } from '../button/button.component'; 
 import { selectCartItems } from '../../store/cart/cart.selector';

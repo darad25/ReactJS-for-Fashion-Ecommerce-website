@@ -21,6 +21,6 @@ const CategoryPreview = ({ title, products }) => {
           </Preview>
         </CategoryPreviewContainer>
     );
-}
+} 
 
 export default CategoryPreview;
